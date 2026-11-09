@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>今年要去哪裡旅行？抽籤器</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      font-family: Arial, "Noto Sans TC", sans-serif;
+      background: linear-gradient(135deg, #fff1e8, #f5eaff);
+      color: #342b3d;
+    }
+    .container {
+      width: min(100%, 520px);
+      padding: 30px;
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 12px 35px rgba(65, 40, 80, .12);
+    }
+    h1 { margin: 0 0 10px; text-align: center; font-size: 27px; }
+    .subtitle { margin: 0 0 24px; text-align: center; color: #786d80; }
+    label { display: block; margin-bottom: 9px; font-weight: bold; }
+    textarea {
+      width: 100%; min-height: 150px; padding: 14px;
+      border: 1px solid #d9cfe2; border-radius: 12px;
+      font: inherit; line-height: 1.8; resize: vertical;
+      outline: none;
+    }
+    textarea:focus { border-color: #9b70c4; box-shadow: 0 0 0 3px #eadcf7; }
+    button {
+      width: 100%; margin-top: 17px; padding: 14px;
+      border: 0; border-radius: 12px; background: #8054a8;
+      color: white; font-size: 18px; font-weight: bold; cursor: pointer;
+    }
+    button:hover { background: #69418f; }
+    button:active { transform: scale(.99); }
+    .result {
+      margin-top: 22px; padding: 22px 16px; text-align: center;
+      background: #faf5ff; border: 1px dashed #c6a8df; border-radius: 14px;
+    }
+    .result-title { margin: 0 0 10px; color: #786d80; font-size: 15px; }
+    #resultText { margin: 0; color: #70439a; font-size: 30px; font-weight: bold; overflow-wrap: anywhere; }
+    #message { min-height: 22px; margin: 12px 0 0; text-align: center; color: #b04444; }
+    .hint { margin: 16px 0 0; color: #8b8191; font-size: 13px; text-align: center; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>✈️ 今年要去哪裡旅行？</h1>
+    <p class="subtitle">讓抽籤器幫你決定下一趟旅程！</p>
+
+    <label for="options">輸入旅行地點（每行一個選項）</label>
+    <textarea id="options" placeholder="例如：&#10;韓國&#10;德國&#10;泰國&#10;日本">韓國
+德國
+泰國
+日本</textarea>
+
+    <button id="drawButton" type="button">幫我選！🎲</button>
+
+    <section class="result" aria-live="polite">
+      <p class="result-title">🎉 抽籤結果</p>
+      <p id="resultText">等待抽籤中⋯</p>
+    </section>
+    <p id="message" role="alert"></p>
+    <p class="hint">小提醒：空白行會自動忽略，重複地點只保留一次。</p>
+  </main>
+
+  <script>
+    const optionsInput = document.getElementById('options');
+    const drawButton = document.getElementById('drawButton');
+    const resultText = document.getElementById('resultText');
+    const message = document.getElementById('message');
+
+    drawButton.addEventListener('click', function () {
+      // 去除每行前後空白、忽略空白行，並移除完全相同的重複選項
+      const options = [...new Set(
+        optionsInput.value
+          .split('\n')
+          .map(option => option.trim())
+          .filter(option => option !== '')
+      )];
+
+      if (options.length === 0) {
+        resultText.textContent = '—';
+        message.textContent = '請先輸入至少一個選項';
+        return;
+      }
+
+      message.textContent = '';
+      const randomIndex = Math.floor(Math.random() * options.length);
+      resultText.textContent = options[randomIndex];
+    });
+  </script>
+</body>
+</html>
